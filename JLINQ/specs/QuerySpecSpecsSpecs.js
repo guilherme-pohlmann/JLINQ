@@ -144,4 +144,33 @@ describe('Testa as funcionalidades da função Enumerable utilizando queries com
         });
         expect(count).toBe(2);
     });
+
+    it('Where+SelectMany+Where++Count+ElementAt', function () {
+
+        var source =
+            [
+                { id: 1, chars: ['1', '2'] },
+                { id: 2, chars: ['3', '4'] },
+                { id: 3, chars: ['5', '6'] },
+                { id: 4, chars: ['7', '8'] },
+                { id: 5, chars: ['9', '10'] },
+                { id: 6, chars: ['11', '12'] },
+                { id: 7, chars: ['13', '14'] },
+                { id: 8, chars: ['15', '16'] },
+                { id: 9, chars: ['17', '18'] },
+                { id: 10, chars: ['19', '20'] },
+            ];
+
+        var result = source.where(function (el) { return el.id > 5 })
+                           .selectMany(function (el) { return el.chars })
+                           .where(function (ch) { return ch - '0' >= 15 });
+
+        expect(result.count()).toBe(6);
+        expect(result.elementAt(0)).toBe('15');
+        expect(result.elementAt(1)).toBe('16');
+        expect(result.elementAt(2)).toBe('17');
+        expect(result.elementAt(3)).toBe('18');
+        expect(result.elementAt(4)).toBe('19');
+        expect(result.elementAt(5)).toBe('20');
+    });
 });

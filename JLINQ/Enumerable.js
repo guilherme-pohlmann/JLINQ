@@ -3,6 +3,7 @@
 /// <reference path="TakeIterator.js" />
 /// <reference path="ArrayIterator.js" />
 /// <reference path="SkipIterator.js" />
+/// <reference path="SelectManyIterator.js" />
 
 (function () {
     function invalidSource() {
@@ -40,7 +41,10 @@
     };
 
     function selectMany(source, selector) {
-        //TODO
+        if (source instanceof Iterator || source instanceof Array) {
+            return new SelectManyIterator(source, selector);
+        }
+        invalidSource();
     };
 
     function take(source, count) {
@@ -305,6 +309,10 @@
         return elementAtOrDefault(this, index, $default);
     };
 
+    Array.prototype.selectMany = function (selector) {
+        return new selectMany(this, selector);
+    };
+
     Array.prototype.forEach = function (action) {
 
         if (!action) {
@@ -390,6 +398,10 @@
 
         this.reset();
         return result;
+    };
+
+    Iterator.prototype.selectMany = function (selector) {
+        return new selectMany(this, selector);
     };
 
     Iterator.prototype.forEach = function (action) {

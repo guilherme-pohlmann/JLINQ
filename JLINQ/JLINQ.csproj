@@ -50,6 +50,7 @@
     <Content Include="ArrayIterator.js" />
     <Content Include="Enumerable.js" />
     <Content Include="Iterator.js" />
+    <Content Include="SelectManyIterator.js" />
     <Content Include="SkipIterator.js" />
     <Content Include="specs\EnumerableSpecSpecs.js" />
     <Content Include="specs\QuerySpecSpecsSpecs.js" />

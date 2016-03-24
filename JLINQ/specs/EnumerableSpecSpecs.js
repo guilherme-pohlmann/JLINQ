@@ -291,4 +291,50 @@ describe('Testa as funcionalidades da função Enumerable', function () {
         expect([1, 2, 3].asIterator().elementAtOrDefault(10, 0)).toBe(0);
         expect([1, 2, 3].asIterator().elementAtOrDefault(-1, 0)).toBe(0);
     });
+
+    it('SelectMany sobre Array', function () {
+        var x =
+         [
+            { ids: [1, 2] },
+            { ids: [3, 4] },
+            { ids: [5, 6] },
+            { ids: [7, 8] },
+            { ids: [9, 10] }
+         ].selectMany(function (el) { return el.ids });
+
+        expect(x.count()).toBe(10);
+        expect(x.elementAt(0)).toBe(1);
+        expect(x.elementAt(1)).toBe(2);
+        expect(x.elementAt(2)).toBe(3);
+        expect(x.elementAt(3)).toBe(4);
+        expect(x.elementAt(4)).toBe(5);
+        expect(x.elementAt(5)).toBe(6);
+        expect(x.elementAt(6)).toBe(7);
+        expect(x.elementAt(7)).toBe(8);
+        expect(x.elementAt(8)).toBe(9);
+        expect(x.elementAt(9)).toBe(10);
+    });
+
+    it('SelectMany sobre Iterator', function () {
+        var x =
+         [
+            { ids: [1, 2] },
+            { ids: [3, 4] },
+            { ids: [5, 6] },
+            { ids: [7, 8] },
+            { ids: [9, 10] }
+         ].asIterator().selectMany(function (el) { return el.ids });
+
+        expect(x.count()).toBe(10);
+        expect(x.elementAt(0)).toBe(1);
+        expect(x.elementAt(1)).toBe(2);
+        expect(x.elementAt(2)).toBe(3);
+        expect(x.elementAt(3)).toBe(4);
+        expect(x.elementAt(4)).toBe(5);
+        expect(x.elementAt(5)).toBe(6);
+        expect(x.elementAt(6)).toBe(7);
+        expect(x.elementAt(7)).toBe(8);
+        expect(x.elementAt(8)).toBe(9);
+        expect(x.elementAt(9)).toBe(10);
+    });
 });
