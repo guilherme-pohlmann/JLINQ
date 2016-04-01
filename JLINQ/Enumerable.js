@@ -4,6 +4,7 @@
 /// <reference path="ArrayIterator.js" />
 /// <reference path="SkipIterator.js" />
 /// <reference path="SelectManyIterator.js" />
+/// <reference path="GroupByIterator.js" />
 
 (function () {
     function invalidSource() {
@@ -253,8 +254,19 @@
         return $default;
     };
 
+    var groupBy = function (source, keySelector, elementSelector) {
+        if (!keySelector) {
+            throw new Error("Argument null: keySelector");
+        }
+        return new GroupByIterator(source, keySelector, elementSelector || _defaultSelector);
+    };
+
     function _defaultComparer(a, b) {
         return a == b;
+    };
+
+    function _defaultSelector(e) {
+        return e;
     };
 
     Array.prototype.asIterator = function () {
@@ -311,6 +323,10 @@
 
     Array.prototype.selectMany = function (selector) {
         return new selectMany(this, selector);
+    };
+
+    Array.prototype.groupBy = function (keySelector, elementSelector) {
+        return groupBy(this, keySelector, elementSelector);
     };
 
     Array.prototype.forEach = function (action) {
@@ -402,6 +418,10 @@
 
     Iterator.prototype.selectMany = function (selector) {
         return new selectMany(this, selector);
+    };
+
+    Iterator.prototype.groupBy = function (keySelector, elementSelector) {
+        return groupBy(this, keySelector, elementSelector);
     };
 
     Iterator.prototype.forEach = function (action) {

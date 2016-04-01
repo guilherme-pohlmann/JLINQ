@@ -1,4 +1,5 @@
-﻿/// <reference path="..\Enumerable.js" />
+﻿/// <reference path="..\Object.js" />
+/// <reference path="..\Enumerable.js" />
 
 describe('Testa as funcionalidades da função Enumerable', function () {
 
@@ -336,5 +337,99 @@ describe('Testa as funcionalidades da função Enumerable', function () {
         expect(x.elementAt(7)).toBe(8);
         expect(x.elementAt(8)).toBe(9);
         expect(x.elementAt(9)).toBe(10);
+    });
+
+    it('GroupBy sobre Array', function () {
+        
+        var array =
+            [
+                {
+                    id: 1,
+                    nome: '1'
+                },
+                {
+                    id: 1,
+                    nome: '2'
+                },
+                {
+                    id: 1,
+                    nome: '3'
+                },
+                {
+                    id: 2,
+                    nome: '4'
+                },
+                {
+                    id: 2,
+                    nome: '4'
+                },
+                {
+                    id: 2,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 3,
+                    nome: '4'
+                },
+                {
+                    id: 3,
+                    nome: '4'
+                },
+                {
+                    id: 3,
+                    nome: '4'
+                },
+                {
+                    id: 3,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 4,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 4,
+                    nome: '4'
+                },
+                {
+                    id: 5,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 5,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 5,
+                    nome: '4'
+                },
+                {
+                    id: 6,
+                    nome: '4'
+                },
+                {
+                    id: 7,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 8,
+                    nome: '4'
+                },
+                {
+                    id: 9,
+                    nome: '4'
+                }
+            ];
+        var x = array.groupBy(function (ob) { return ob.id }, function (ob) { return ob });
+
+        while (x.moveNext()) {
+            var cur = x.current;
+        }
     });
 });

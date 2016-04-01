@@ -49,6 +49,7 @@
     <Content Include="3rd-party\jasmine\SpecRunner.html" />
     <Content Include="ArrayIterator.js" />
     <Content Include="Enumerable.js" />
+    <Content Include="GroupByIterator.js" />
     <Content Include="Iterator.js" />
     <Content Include="Object.js" />
     <Content Include="SelectManyIterator.js" />
