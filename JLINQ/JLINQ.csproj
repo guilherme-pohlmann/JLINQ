@@ -50,14 +50,17 @@
     <Content Include="ArrayIterator.js" />
     <Content Include="Enumerable.js" />
     <Content Include="Iterator.js" />
+    <Content Include="Object.js" />
     <Content Include="SelectManyIterator.js" />
     <Content Include="SkipIterator.js" />
     <Content Include="specs\EnumerableSpecSpecs.js" />
+    <Content Include="specs\ObjectSpecsSpecSpecs.js" />
     <Content Include="specs\QuerySpecSpecsSpecs.js" />
     <Content Include="TakeIterator.js" />
     <Content Include="WhereSelectIterator.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="dist\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
