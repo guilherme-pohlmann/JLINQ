@@ -53,6 +53,7 @@
     <Content Include="GroupByIterator.js" />
     <Content Include="Iterator.js" />
     <Content Include="Object.js" />
+    <Content Include="OrderByIterator.js" />
     <Content Include="SelectManyIterator.js" />
     <Content Include="SkipIterator.js" />
     <Content Include="specs\DataTableSpecs.js" />

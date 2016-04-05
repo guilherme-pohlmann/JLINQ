@@ -5,6 +5,7 @@
 /// <reference path="SkipIterator.js" />
 /// <reference path="SelectManyIterator.js" />
 /// <reference path="GroupByIterator.js" />
+/// <reference path="OrderByIterator.js" />
 
 (function () {
     function invalidSource() {
@@ -327,6 +328,18 @@
 
     Array.prototype.groupBy = function (keySelector, elementSelector) {
         return groupBy(this, keySelector, elementSelector);
+    };
+
+    Array.prototype.insert = function (index, element) {
+        this.splice(index, 0, element);
+    };
+
+    Array.prototype.orderBy = function (keySelector) {
+        return new OrderByIterator(this, keySelector, false);
+    };
+
+    Array.prototype.orderByDescending = function (keySelector) {
+        return new OrderByIterator(this, keySelector, true);
     };
 
     Array.prototype.forEach = function (action) {

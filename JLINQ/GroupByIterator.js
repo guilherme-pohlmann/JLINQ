@@ -44,7 +44,7 @@ function Lookup() {
         var hashCode = computeHash(key);
 
         for (var g = this.groupings[hashCode % this.groupings.length]; g != null; g = g.hashNext) {
-            if (g.hashCode == hashCode) {
+            if (g.hashCode === hashCode) {
                 return g;
             }
         }

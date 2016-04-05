@@ -432,4 +432,12 @@ describe('Testa as funcionalidades da função Enumerable', function () {
             var cur = x.current;
         }
     });
+
+    it('OrderBy sobre Array', function () {
+        
+        var ar = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].orderBy(function (e) { return e }).toArray();
+
+
+
+    });
 });

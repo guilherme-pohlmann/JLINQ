@@ -38,6 +38,15 @@ function DataTable() {
         return index;
     };
 
+    this.insertColumn = function (index, name) {
+        this.columns.splice(index, 0, new DataColumn(name));
+
+        for (var i = 0; i < this.rows.length; i++) {
+            this.rows[i].values.splice(index, 0, undefined);
+        }
+        return index;
+    };
+
     this.addRow = function (dataRow) {
         return this.rows.push(dataRow) - 1;
     };
