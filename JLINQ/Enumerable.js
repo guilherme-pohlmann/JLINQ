@@ -429,8 +429,23 @@
             return;
         }
 
+        var $break = false;
+        var index = 0;
+
         while (this.moveNext()) {
-            action(this.current);
+            var option = {
+                $index: index,
+                $break: function () {
+                    $break = true;
+                }
+            };
+
+            action(this.current, option);
+
+            if ($break) {
+                break;
+            }
+            index++;
         }
         this.reset();
     };

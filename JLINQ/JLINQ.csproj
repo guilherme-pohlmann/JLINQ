@@ -48,12 +48,14 @@
     <Content Include="3rd-party\jasmine\jasmine_favicon.png" />
     <Content Include="3rd-party\jasmine\SpecRunner.html" />
     <Content Include="ArrayIterator.js" />
+    <Content Include="DataTable.js" />
     <Content Include="Enumerable.js" />
     <Content Include="GroupByIterator.js" />
     <Content Include="Iterator.js" />
     <Content Include="Object.js" />
     <Content Include="SelectManyIterator.js" />
     <Content Include="SkipIterator.js" />
+    <Content Include="specs\DataTableSpecs.js" />
     <Content Include="specs\EnumerableSpecSpecs.js" />
     <Content Include="specs\ObjectSpecsSpecSpecs.js" />
     <Content Include="specs\QuerySpecSpecsSpecs.js" />
