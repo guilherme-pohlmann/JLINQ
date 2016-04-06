@@ -11,7 +11,7 @@ function WhereSelectIterator(_source, _predicate, _selector) {
         this.iterateFunction = iterateInterator;
     }
     else {
-        throw new Error("Invalid argument.");
+        throw new Error("Invalid argument: _source.");
     }
 
     var source = _source;

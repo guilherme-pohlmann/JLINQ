@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../dist/jlinq.min.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript">
+        (function () {
+
+            var array = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+
+            array.orderBy(function (e) { return e })
+                 .where(function (e) { return e > 5 })
+                 .skip(1)
+                 .forEach(function (e) {
+                     alert(e);
+                 });
+
+        })();
+    </script>
+
+</body>
+</html>

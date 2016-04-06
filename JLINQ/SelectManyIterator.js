@@ -12,14 +12,12 @@ function SelectManyIterator(_source, _selector) {
         this.iterateFunction = iterateInterator;
     }
     else {
-        throw new Error("Invalid argument.");
+        throw new Error("Invalid argument: _source.");
     }
     if (!_selector) {
-        throw new Error("Argument null: _selector");
+        throw new Error("Invalid null argument: _selector.");
     }
 
-    var source = _source;
-    var selector = _selector;
     var index = -1;
     var currentIterator;
 
@@ -39,9 +37,9 @@ function SelectManyIterator(_source, _selector) {
 
         index++;
 
-        for (var i = index; i < source.length; i++) {
+        for (var i = index; i < _source.length; i++) {
             index = i;
-            currentIterator = new ArrayIterator(selector(source[i]));
+            currentIterator = new ArrayIterator(_selector(_source[i]));
 
             if (this.iterateCurrent()) {
                 return true;
@@ -57,8 +55,8 @@ function SelectManyIterator(_source, _selector) {
             return true;
         }
 
-        while (source.moveNext()) {
-            currentIterator = new ArrayIterator(selector(source.current));
+        while (_source.moveNext()) {
+            currentIterator = new ArrayIterator(_selector(_source.current));
 
             if (this.iterateCurrent()) {
                 return true;
@@ -69,8 +67,8 @@ function SelectManyIterator(_source, _selector) {
     };
 
     this.resetFunction = function () {
-        if (source instanceof Iterator) {
-            source.reset();
+        if (_source instanceof Iterator) {
+            _source.reset();
         }
         index = -1;
         currentIterator = undefined;

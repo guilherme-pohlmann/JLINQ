@@ -49,6 +49,11 @@
     <Content Include="3rd-party\jasmine\SpecRunner.html" />
     <Content Include="ArrayIterator.js" />
     <Content Include="DataTable.js" />
+    <Content Include="demo\index.html" />
+    <Content Include="dist\jlinq.js" />
+    <Content Include="dist\jlinq.min.js">
+      <DependentUpon>jlinq.js</DependentUpon>
+    </Content>
     <Content Include="Enumerable.js" />
     <Content Include="GroupByIterator.js" />
     <Content Include="Iterator.js" />
@@ -64,11 +69,13 @@
     <Content Include="WhereSelectIterator.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="dist\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

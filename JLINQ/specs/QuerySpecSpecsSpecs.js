@@ -173,4 +173,15 @@ describe('Testa as funcionalidades da função Enumerable utilizando queries com
         expect(result.elementAt(4)).toBe('19');
         expect(result.elementAt(5)).toBe('20');
     });
+
+    it('OrderBy+Where+Skip+forEach', function () {
+        var array = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+
+        array.orderBy(function (e) { return e })
+             .where(function (e) { return e > 5 })
+             .skip(1)
+             .forEach(function (e) {
+                 expect(e > 6).toBe(true);
+             });
+    });
 });

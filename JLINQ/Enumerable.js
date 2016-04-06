@@ -8,266 +8,8 @@
 /// <reference path="OrderByIterator.js" />
 
 (function () {
-    function invalidSource() {
-        throw new Error("Invalid source");
-    };
-
-    function where(source, predicate) {
-        if (source instanceof Iterator) {
-            if (source.getPredicate && !source.getPredicate()) {
-                source.setPredicate(predicate);
-                return source;
-            }
-            return new WhereSelectIterator(source, predicate);
-        }
-        else if (source instanceof Array) {
-            return new WhereSelectIterator(source, predicate);
-        }
-        invalidSource();
-    };
-
-    function select(source, selector) {
-        if (source instanceof Iterator) {
-            if (source.getSelector && !source.getSelector()) {
-                source.setSelector(selector);
-                return source;
-            }
-            else {
-                return new WhereSelectIterator(source, undefined, selector);
-            }
-        }
-        else if (source instanceof Array) {
-            return new WhereSelectIterator(source, undefined, selector);
-        }
-        invalidSource();
-    };
-
-    function selectMany(source, selector) {
-        if (source instanceof Iterator || source instanceof Array) {
-            return new SelectManyIterator(source, selector);
-        }
-        invalidSource();
-    };
-
-    function take(source, count) {
-        if (source instanceof Iterator || source instanceof Array) {
-            return new TakeIterator(source, count);
-        }
-        invalidSource();
-    };
-
-    function skip(source, count) {
-        if (source instanceof Iterator || source instanceof Array) {
-            return new SkipIterator(source, count);
-        }
-        invalidSource();
-    };
-
-    function firstOrDefault(source, $default) {
-        if (source instanceof Array && source.length > 0) {
-            return source[0];
-        }
-        else if (source instanceof Iterator && source.moveNext()) {
-            var result = source.current;
-            source.reset();
-
-            return result;
-        }
-        return $default;
-    };
-
-    function lastOrDefault(source, $default) {
-        if (source instanceof Array && source.length > 0) {
-            return source[source.length - 1];
-        }
-        else if (source instanceof Iterator && source.moveNext()) {
-            var result;
-
-            do {
-                result = source.current;
-            }
-            while (source.moveNext());
-
-            source.reset();
-            return result;
-        }
-        return $default;
-    };
-
-    function any(source, predicate) {
-        if (source instanceof Array) {
-            if (predicate) {
-                for (var i = 0; i < source.length; i++) {
-                    if (predicate(source[i])) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return source.length > 0;
-        }
-        else if (source instanceof Iterator) {
-            if (predicate) {
-                while (source.moveNext()) {
-                    if (predicate(source.current)) {
-                        source.reset();
-                        return true;
-                    }
-                }
-                source.reset();
-                return false;
-            }
-            var hasAny = source.moveNext();
-            source.reset();
-
-            return hasAny;
-        }
-        return false;
-    };
-
-    function all(source, predicate) {
-
-        if (!predicate) {
-            throw new Error("Argument null: predicate");
-        }
-
-        if (source instanceof Array) {
-            for (var i = 0; i < source.length; i++) {
-                if (!predicate(source[i])) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (source instanceof Iterator) {
-            while (source.moveNext()) {
-                if (!predicate(source.current)) {
-                    source.reset();
-                    return false;
-                }
-            }
-            source.reset();
-            return true;
-        }
-        invalidSource();
-    };
-
-    function count(source) {
-        var count = 0;
-
-        if (source instanceof Array) {
-            count = source.length;
-        }
-        else if (source instanceof Iterator) {
-            while (source.moveNext()) {
-                count++;
-            }
-            source.reset();
-        }
-        else {
-            invalidSource();
-        }
-        return count;
-    };
-
-    function contains(source, value, comparer) {
-        if (source instanceof Array) {
-            for (var i = 0; i < source.length; i++) {
-                if (comparer(source[i], value)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        else if (source instanceof Iterator) {
-            while (source.moveNext()) {
-                if (comparer(source.current, value)) {
-                    source.reset();
-                    return true;
-                }
-            }
-            source.reset();
-            return false;
-        }
-        invalidSource();
-    };
-
-    function elementAt(source, index) {
-        if (index < 0) {
-            throw new Error("Index out of range.");
-        }
-
-        var element;
-
-        if (source instanceof Array) {
-            if (index < source.length) {
-                element = source[index];
-            }
-            else {
-                throw new Error("Index out of range.");
-            }
-        }
-        else if (source instanceof Iterator) {
-            while (true) {
-                if (!source.moveNext()) {
-                    throw new Error("Index out of range.");
-                }
-                if (index == 0) {
-                    element = source.current;
-                    break;
-                }
-                index--;
-            }
-            source.reset();
-        }
-        else {
-            invalidSource();
-        }
-        return element;
-    };
-
-    function elementAtOrDefault(source, index, $default) {
-        if (index < 0) {
-            return $default;
-        }
-
-        if (source instanceof Array) {
-            if (index < source.length) {
-                return source[index];
-            }
-        }
-        else if (source instanceof Iterator) {
-            while (true) {
-                if (!source.moveNext()) {
-                    break;
-                }
-                if (index == 0) {
-                    source.reset();
-                    return source.current;
-                }
-                index--;
-            }
-            source.reset();
-        }
-        else {
-            invalidSource();
-        }
-        return $default;
-    };
-
-    var groupBy = function (source, keySelector, elementSelector) {
-        if (!keySelector) {
-            throw new Error("Argument null: keySelector");
-        }
-        return new GroupByIterator(source, keySelector, elementSelector || _defaultSelector);
-    };
-
     function _defaultComparer(a, b) {
         return a == b;
-    };
-
-    function _defaultSelector(e) {
-        return e;
     };
 
     Array.prototype.asIterator = function () {
@@ -275,59 +17,94 @@
     };
 
     Array.prototype.where = function (predicate) {
-        return where(this, predicate);
+        return new WhereSelectIterator(this, predicate);
     };
 
     Array.prototype.select = function (selector) {
-        return select(this, selector);
+        return new WhereSelectIterator(this, undefined, selector);
     };
 
     Array.prototype.take = function (count) {
-        return take(this, count);
+        return new TakeIterator(this, count);
     };
 
     Array.prototype.skip = function (count) {
-        return skip(this, count);
+        return new SkipIterator(this, count);
     };
 
     Array.prototype.firstOrDefault = function ($default) {
-        return firstOrDefault(this, $default);
+        if (this.length > 0) {
+            return this[0];
+        }
+        return $default;
     };
 
     Array.prototype.lastOrDefault = function ($default) {
-        return lastOrDefault(this, $default);
+        if (this.length > 0) {
+            return this[this.length - 1];
+        }
+        return $default;
     };
 
     Array.prototype.any = function (predicate) {
-        return any(this, predicate);
+        if (predicate) {
+            for (var i = 0; i < this.length; i++) {
+                if (predicate(this[i])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return this.length > 0;
     };
 
     Array.prototype.all = function (predicate) {
-        return all(this, predicate);
+        if (!predicate) {
+            throw new Error("Invalid null argument: predicate.");
+        }
+        for (var i = 0; i < this.length; i++) {
+            if (!predicate(this[i])) {
+                return false;
+            }
+        }
+        return true;
     };
 
     Array.prototype.count = function () {
-        return count(this);
+        return this.length;
     };
 
     Array.prototype.contains = function (value, comparer) {
-        return contains(this, value, comparer || _defaultComparer);
+        var comparerImp = comparer || _defaultComparer;
+
+        for (var i = 0; i < this.length; i++) {
+            if (comparerImp(this[i], value)) {
+                return true;
+            }
+        }
+        return false;
     };
 
     Array.prototype.elementAt = function (index) {
-        return elementAt(this, index);
+        if (index < 0 || index >= this.length) {
+            throw new Error("Index out of range.");
+        }
+        return this[index];
     };
 
     Array.prototype.elementAtOrDefault = function (index, $default) {
-        return elementAtOrDefault(this, index, $default);
+        if (index < 0 || index >= this.length) {
+            return $default;
+        }
+        return this[index];
     };
 
     Array.prototype.selectMany = function (selector) {
-        return new selectMany(this, selector);
+        return new SelectManyIterator(this, selector);
     };
 
     Array.prototype.groupBy = function (keySelector, elementSelector) {
-        return groupBy(this, keySelector, elementSelector);
+        return new GroupByIterator(this, keySelector, elementSelector);
     };
 
     Array.prototype.insert = function (index, element) {
@@ -371,51 +148,144 @@
     };
 
     Iterator.prototype.where = function (predicate) {
-        return where(this, predicate);
+        if (this.getPredicate && !this.getPredicate()) {
+            this.setPredicate(predicate);
+            return this;
+        }
+        return new WhereSelectIterator(this, predicate);
     };
 
     Iterator.prototype.select = function (selector) {
-        return select(this, selector);
+        if (this.getSelector && !this.getSelector()) {
+            this.setSelector(selector);
+            return this;
+        }
+        return new WhereSelectIterator(this, undefined, selector);
     };
 
     Iterator.prototype.take = function (count) {
-        return take(this, count);
+        return new TakeIterator(this, count);
     };
 
     Iterator.prototype.skip = function (count) {
-        return skip(this, count);
+        return new SkipIterator(this, count);
     };
 
     Iterator.prototype.firstOrDefault = function ($default) {
-        return firstOrDefault(this, $default);
+        if (this.moveNext()) {
+            var result = this.current;
+            this.reset();
+
+            return result;
+        }
+        return $default;
     };
 
     Iterator.prototype.lastOrDefault = function ($default) {
-        return lastOrDefault(this, $default);
+        if (this.moveNext()) {
+            var result;
+
+            do {
+                result = this.current;
+            }
+            while (this.moveNext());
+
+            this.reset();
+            return result;
+        }
+        return $default;
     };
 
     Iterator.prototype.any = function (predicate) {
-        return any(this, predicate);
+        if (predicate) {
+            while (this.moveNext()) {
+                if (predicate(this.current)) {
+                    this.reset();
+                    return true;
+                }
+            }
+            this.reset();
+            return false;
+        }
+        var hasAny = this.moveNext();
+        this.reset();
+
+        return hasAny;
     };
 
     Iterator.prototype.all = function (predicate) {
-        return all(this, predicate);
+        if (!predicate) {
+            throw new Error("Invalid null argument: predicate.");
+        }
+        while (this.moveNext()) {
+            if (!predicate(this.current)) {
+                this.reset();
+                return false;
+            }
+        }
+        this.reset();
+        return true;
     };
 
     Iterator.prototype.count = function () {
-        return count(this);
+        var count = 0;
+
+        while (this.moveNext()) {
+            count++;
+        }
+        this.reset();
+        return count;
     };
 
     Iterator.prototype.contains = function (value, comparer) {
-        return contains(this, value, comparer || _defaultComparer);
+        var comparerImp = comparer || _defaultComparer;
+
+        while (this.moveNext()) {
+            if (comparerImp(this.current, value)) {
+                this.reset();
+                return true;
+            }
+        }
+        this.reset();
+        return false;
     };
 
     Iterator.prototype.elementAt = function (index) {
-        return elementAt(this, index);
+        var element;
+
+        while (true) {
+            if (!this.moveNext()) {
+                throw new Error("Sequence is empty.");
+            }
+            if (index == 0) {
+                element = this.current;
+                break;
+            }
+            index--;
+        }
+        this.reset();
+        return element;
     };
 
     Iterator.prototype.elementAtOrDefault = function (index, $default) {
-        return elementAtOrDefault(this, index, $default);
+        if (index < 0) {
+            return $default;
+        }
+
+        var result = $default;
+
+        while (true) {
+            if (!this.moveNext()) {
+                break;
+            }
+            if (index === 0) {
+                result = this.current;
+                break;
+            }
+            index--;
+        }
+        this.reset();
+        return result;
     };
 
     Iterator.prototype.toArray = function () {
@@ -430,11 +300,19 @@
     };
 
     Iterator.prototype.selectMany = function (selector) {
-        return new selectMany(this, selector);
+        return new SelectManyIterator(this, selector);
     };
 
     Iterator.prototype.groupBy = function (keySelector, elementSelector) {
-        return groupBy(this, keySelector, elementSelector);
+        return new GroupByIterator(this, keySelector, elementSelector);
+    };
+
+    Iterator.prototype.orderBy = function (keySelector) {
+        return new OrderByIterator(this, keySelector, false);
+    };
+
+    Iterator.prototype.orderByDescending = function (keySelector) {
+        return new OrderByIterator(this, keySelector, true);
     };
 
     Iterator.prototype.forEach = function (action) {

@@ -4,19 +4,6 @@
 function OrderByIterator(_source, _keySelector, _desc) {
     Iterator.call(this, _source);
 
-    if (_source instanceof Array) {
-        this.iterateFunction = iterateArray;
-    }
-    else if (_source instanceof Iterator) {
-        this.iterateFunction = iterateIterator;
-    }
-    else {
-        throw new Error("Invalid argument.");
-    }
-
-    var source = _source;
-    var keySelector = _keySelector;
-    var desc = _desc;
     var resultIterator;
     var keys;
 
@@ -33,7 +20,7 @@ function OrderByIterator(_source, _keySelector, _desc) {
     function computeKeys(elements, count) {
         keys = new Array(count);
         for (var i = 0; i < count; i++) {
-            keys[i] = keySelector(elements[i]);
+            keys[i] = _keySelector(elements[i]);
         }
     };
 
@@ -43,7 +30,7 @@ function OrderByIterator(_source, _keySelector, _desc) {
         if (v === 0) {
             return index1 - index2;
         }
-        return desc ? -v : v;
+        return _desc ? -v : v;
     }
 
     function sort(elements, count) {
@@ -64,9 +51,15 @@ function OrderByIterator(_source, _keySelector, _desc) {
             var j = right;
             var x = map[i + ((j - i) >> 1)];
             do {
-                while (i < map.length && compareKeys(x, map[i]) > 0) i++;
-                while (j >= 0 && compareKeys(x, map[j]) < 0) j--;
-                if (i > j) break;
+                while (i < map.length && compareKeys(x, map[i]) > 0) {
+                    i++
+                };
+                while (j >= 0 && compareKeys(x, map[j]) < 0) {
+                    j--
+                };
+                if (i > j) {
+                    break
+                };
                 if (i < j) {
                     var temp = map[i];
                     map[i] = map[j];
@@ -86,25 +79,50 @@ function OrderByIterator(_source, _keySelector, _desc) {
         } while (left < right);
     }
 
-    function iterateArray() {
+    function iterateArray(elements) {
         var result = [];
 
-        if (source.length > 0) {
-            var map = sort(source, source.length);
+        if (elements.length > 0) {
+            var map = sort(elements, elements.length);
 
-            for (var i = 0; i < source.length; i++) {
-                result.push(source[map[i]]);
+            for (var i = 0; i < elements.length; i++) {
+                result.push(elements[map[i]]);
             }
         }
         resultIterator = new ArrayIterator(result);
     };
 
     function iterateIterator() {
-        
-        
-
-        
+        iterateArray(_source.toArray());
     };
+
+    this.iterateFunction = function () {
+        while (resultIterator.moveNext()) {
+            this.current = resultIterator.current;
+            return true;
+        }
+
+        this.completed = true;
+        return false;
+    };
+
+    this.resetFunction = function () {
+        resultIterator.reset();
+    };
+
+    if (_source instanceof Array) {
+        iterateArray(_source);
+    }
+    else if (_source instanceof Iterator) {
+        iterateIterator();
+    }
+    else {
+        throw new Error("Invalid argument: _source.");
+    }
+
+    if (!_keySelector) {
+        throw new Error("Invalid null argument: _keySelector.");
+    }
 };
 
 OrderByIterator.prototype = Iterator.prototype;

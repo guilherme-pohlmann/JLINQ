@@ -143,7 +143,14 @@ function GroupByIterator(_source, _keySelector, _elementSelector) {
         iterateInterator();
     }
     else {
-        throw new Error("Invalid argument.");
+        throw new Error("Invalid argument: _source.");
+    }
+
+    if (!_keySelector) {
+        throw new Error("Invalid null argument: _keySelector.");
+    }
+    if (!_elementSelector) {
+        throw new Error("Invalid null argument: _elementSelector.");
     }
 };
 

@@ -10,19 +10,18 @@ function SkipIterator(_source, _count) {
         this.iterateFunction = iterateInterator;
     }
     else {
-        throw new Error("Invalid argument.");
+        throw new Error("Invalid argument: _source.");
     }
 
     //snapshot
     var originalCount = _count;
     var count = originalCount;
-    var source = _source;
-    var index = Math.min(count, source.length);
+    var index = Math.min(count, _source.length);
 
     function iterateArray() {
 
-        if (index > 0 && index < source.length) {
-            this.current = source[index];
+        if (index > 0 && index < _source.length) {
+            this.current = _source[index];
             index++;
             return true;
         }
@@ -32,13 +31,13 @@ function SkipIterator(_source, _count) {
     };
 
     function iterateInterator() {
-        while (count > 0 && source.moveNext()) {
+        while (count > 0 && _source.moveNext()) {
             count--;
         }
 
-        if (count > 0) {
-            while (source.moveNext()) {
-                this.current = source.current;
+        if (count <= 0) {
+            while (_source.moveNext()) {
+                this.current = _source.current;
                 return true;
             }
         }
@@ -47,11 +46,11 @@ function SkipIterator(_source, _count) {
     };
 
     this.resetFunction = function () {
-        if (source instanceof Iterator) {
-            source.reset();
+        if (_source instanceof Iterator) {
+            _source.reset();
         }
         count = originalCount;
-        index = Math.min(count, source.length);
+        index = Math.min(count, _source.length);
     };
 };
 

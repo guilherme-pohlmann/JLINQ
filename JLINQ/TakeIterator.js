@@ -10,10 +10,9 @@ function TakeIterator(_source, _count) {
         this.iterateFunction = iterateInterator;
     }
     else {
-        throw new Error("Invalid argument.");
+        throw new Error("Invalid argument: _source.");
     }
 
-    var source = _source;
     var originalCount = _count;
     var count = originalCount;
     var index = -1;
@@ -21,8 +20,8 @@ function TakeIterator(_source, _count) {
     function iterateArray() {
         index++;
 
-        if (index < count && index < source.length) {
-            this.current = source[index];
+        if (index < count && index < _source.length) {
+            this.current = _source[index];
             return true;
         }
 
@@ -31,8 +30,8 @@ function TakeIterator(_source, _count) {
     };
 
     function iterateInterator() {
-        while (source.moveNext()) {
-            this.current = source.current;
+        while (_source.moveNext()) {
+            this.current = _source.current;
 
             if (--count == 0) {
                 this.completed = true;
@@ -44,8 +43,8 @@ function TakeIterator(_source, _count) {
     };
 
     this.resetFunction = function () {
-        if (source instanceof Iterator) {
-            source.reset();
+        if (_source instanceof Iterator) {
+            _source.reset();
         }
         count = originalCount;
         index = -1;

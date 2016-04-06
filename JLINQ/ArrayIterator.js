@@ -7,17 +7,16 @@ function ArrayIterator(_source) {
         this.iterateFunction = iterateArray;
     }
     else {
-        throw new Error("Invalid argument.");
+        throw new Error("Invalid argument: _source.");
     }
 
-    var source = _source;
     var index = -1;
 
     function iterateArray() {
         index++;
 
-        if (index < source.length) {
-            this.current = source[index];
+        if (index < _source.length) {
+            this.current = _source[index];
             return true;
         }
 

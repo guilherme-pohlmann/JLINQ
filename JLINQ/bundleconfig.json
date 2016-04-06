@@ -1,0 +1,17 @@
+[
+  {
+    "outputFileName": "dist/jlinq.js",
+    "inputFiles": [
+      "ArrayIterator.js",
+      "Enumerable.js",
+      "GroupByIterator.js",
+      "Iterator.js",
+      "Object.js",
+      "OrderByIterator.js",
+      "SelectManyIterator.js",
+      "SkipIterator.js",
+      "TakeIterator.js",
+      "WhereSelectIterator.js"
+    ]
+  }
+]

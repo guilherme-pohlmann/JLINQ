@@ -1,4 +1,8 @@
-﻿function Iterator() {
+﻿function Iterator(_source) {
+
+    if (!_source) {
+        throw new Error("Invalid null argument: _source.");
+    }
 
     this.completed = false;
     this.current = undefined;

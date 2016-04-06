@@ -262,7 +262,7 @@ describe('Testa as funcionalidades da função Enumerable', function () {
     });
 
     it('ElementAt sobre sobre Iterator sem resultado', function () {
-        expect(function () { [1, 2, 3].asIterator().elementAt(5) }).toThrow(new Error("Index out of range."));
+        expect(function () { [1, 2, 3].asIterator().elementAt(5) }).toThrow(new Error("Sequence is empty."));
     });
 
     it('ElementAtOrDefault sobre Array com resultado', function () {
@@ -340,7 +340,7 @@ describe('Testa as funcionalidades da função Enumerable', function () {
     });
 
     it('GroupBy sobre Array', function () {
-        
+
         var array =
             [
                 {
@@ -426,18 +426,212 @@ describe('Testa as funcionalidades da função Enumerable', function () {
                     nome: '4'
                 }
             ];
-        var x = array.groupBy(function (ob) { return ob.id }, function (ob) { return ob });
+        var x = array.groupBy(function (ob) { return ob.id }, function (ob) { return ob }).toArray();
 
-        while (x.moveNext()) {
-            var cur = x.current;
-        }
+        expect(x.elementAt(0).key).toBe(1);
+        expect(x.elementAt(0).elements.count()).toBe(3);
+
+        expect(x.elementAt(1).key).toBe(2);
+        expect(x.elementAt(1).elements.count()).toBe(3);
+
+        expect(x.elementAt(2).key).toBe(3);
+        expect(x.elementAt(2).elements.count()).toBe(4);
+
+        expect(x.elementAt(3).key).toBe(4);
+        expect(x.elementAt(3).elements.count()).toBe(2);
+
+        expect(x.elementAt(4).key).toBe(5);
+        expect(x.elementAt(4).elements.count()).toBe(3);
+
+        expect(x.elementAt(5).key).toBe(6);
+        expect(x.elementAt(5).elements.count()).toBe(1);
+
+        expect(x.elementAt(6).key).toBe(7);
+        expect(x.elementAt(6).elements.count()).toBe(1);
+
+        expect(x.elementAt(7).key).toBe(8);
+        expect(x.elementAt(7).elements.count()).toBe(1);
+
+        expect(x.elementAt(8).key).toBe(9);
+        expect(x.elementAt(8).elements.count()).toBe(1);
+
+    });
+
+    it('GroupBy sobre Iterator', function () {
+
+        var array =
+            [
+                {
+                    id: 1,
+                    nome: '1'
+                },
+                {
+                    id: 1,
+                    nome: '2'
+                },
+                {
+                    id: 1,
+                    nome: '3'
+                },
+                {
+                    id: 2,
+                    nome: '4'
+                },
+                {
+                    id: 2,
+                    nome: '4'
+                },
+                {
+                    id: 2,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 3,
+                    nome: '4'
+                },
+                {
+                    id: 3,
+                    nome: '4'
+                },
+                {
+                    id: 3,
+                    nome: '4'
+                },
+                {
+                    id: 3,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 4,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 4,
+                    nome: '4'
+                },
+                {
+                    id: 5,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 5,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 5,
+                    nome: '4'
+                },
+                {
+                    id: 6,
+                    nome: '4'
+                },
+                {
+                    id: 7,
+                    nome: '4'
+                }
+                ,
+                {
+                    id: 8,
+                    nome: '4'
+                },
+                {
+                    id: 9,
+                    nome: '4'
+                }
+            ];
+        var x = array.asIterator().groupBy(function (ob) { return ob.id }, function (ob) { return ob }).toArray();
+
+        expect(x.elementAt(0).key).toBe(1);
+        expect(x.elementAt(0).elements.count()).toBe(3);
+
+        expect(x.elementAt(1).key).toBe(2);
+        expect(x.elementAt(1).elements.count()).toBe(3);
+
+        expect(x.elementAt(2).key).toBe(3);
+        expect(x.elementAt(2).elements.count()).toBe(4);
+
+        expect(x.elementAt(3).key).toBe(4);
+        expect(x.elementAt(3).elements.count()).toBe(2);
+
+        expect(x.elementAt(4).key).toBe(5);
+        expect(x.elementAt(4).elements.count()).toBe(3);
+
+        expect(x.elementAt(5).key).toBe(6);
+        expect(x.elementAt(5).elements.count()).toBe(1);
+
+        expect(x.elementAt(6).key).toBe(7);
+        expect(x.elementAt(6).elements.count()).toBe(1);
+
+        expect(x.elementAt(7).key).toBe(8);
+        expect(x.elementAt(7).elements.count()).toBe(1);
+
+        expect(x.elementAt(8).key).toBe(9);
+        expect(x.elementAt(8).elements.count()).toBe(1);
+
     });
 
     it('OrderBy sobre Array', function () {
-        
-        var ar = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].orderBy(function (e) { return e }).toArray();
 
+        var array = [];
 
+        for (var i = 30; i > 0; i--) {
+            array.push(i);
+        }
 
+        array = array.orderBy(function (e) { return e }).toArray();
+
+        for (var i = 0; i < 30; i++) {
+            expect(array.elementAt(i)).toBe(i + 1);
+        }
+    });
+
+    it('OrderByDescending sobre Array', function () {
+
+        var array = [];
+
+        for (var i = 0; i < 30; i++) {
+            array.push(i);
+        }
+
+        array = array.orderBy(function (e) { return e }).toArray();
+
+        for (var i = 29; i >= 0; i--) {
+            expect(array.elementAt(i)).toBe(i);
+        }
+    });
+
+    it('OrderBy sobre Iterator', function () {
+
+        var array = [];
+
+        for (var i = 30; i > 0; i--) {
+            array.push(i);
+        }
+
+        array = array.asIterator().orderBy(function (e) { return e }).toArray();
+
+        for (var i = 0; i < 30; i++) {
+            expect(array.elementAt(i)).toBe(i + 1);
+        }
+    });
+
+    it('OrderByDescending sobre Iterator', function () {
+
+        var array = [];
+
+        for (var i = 0; i < 30; i++) {
+            array.push(i);
+        }
+
+        array = array.asIterator().orderBy(function (e) { return e }).toArray();
+
+        for (var i = 29; i >= 0; i--) {
+            expect(array.elementAt(i)).toBe(i);
+        }
     });
 });
