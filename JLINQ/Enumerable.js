@@ -39,6 +39,20 @@
         return $default;
     };
 
+    Array.prototype.firstOrDefault = function ($default, predicate) {
+        if (predicate) {
+            var source = this;
+            for (var index = 0; index < source.length; index++) {
+                if (predicate(source[index])) {
+                    return source[index];
+                }
+            }
+        } else if (this.length > 0) {
+            return this[0];
+        }
+        return $default;
+    };
+
     Array.prototype.lastOrDefault = function ($default) {
         if (this.length > 0) {
             return this[this.length - 1];

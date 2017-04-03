@@ -125,7 +125,19 @@ describe('Testa as funcionalidades da função Enumerable', function () {
 
         expect(el).toBe(0);
     });
+    
+    it('FirstOrDefault sobre Array com predicate com resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].firstOrDefault(0, function (el) { return el === 8 });
 
+        expect(el).toBe(8);
+    });
+
+    it('FirstOrDefault sobre Array com predicate sem resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].firstOrDefault(0, function (el) { return el === 15 });
+
+        expect(el).toBe(0);
+    });
+    
     it('LastOrDefault sobre Array com resultado', function () {
         var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].lastOrDefault();
 
