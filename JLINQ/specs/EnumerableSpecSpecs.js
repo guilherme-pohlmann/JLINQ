@@ -107,6 +107,18 @@ describe('Testa as funcionalidades da função Enumerable', function () {
 
         expect(el).toBe(0);
     });
+    
+    it('FirstOrDefault sobre Array com predicate com resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].firstOrDefault(0, function (el) { return el === 8 });
+
+        expect(el).toBe(8);
+    });
+
+    it('FirstOrDefault sobre Array com predicate sem resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].firstOrDefault(0, function (el) { return el === 15 });
+
+        expect(el).toBe(0);
+    });
 
     it('FirstOrDefault sobre Iterator com resultado', function () {
         var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].asIterator().firstOrDefault();
@@ -125,19 +137,7 @@ describe('Testa as funcionalidades da função Enumerable', function () {
 
         expect(el).toBe(0);
     });
-    
-    it('FirstOrDefault sobre Array com predicate com resultado', function () {
-        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].firstOrDefault(0, function (el) { return el === 8 });
-
-        expect(el).toBe(8);
-    });
-
-    it('FirstOrDefault sobre Array com predicate sem resultado', function () {
-        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].firstOrDefault(0, function (el) { return el === 15 });
-
-        expect(el).toBe(0);
-    });
-    
+       
     it('LastOrDefault sobre Array com resultado', function () {
         var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].lastOrDefault();
 
@@ -156,9 +156,39 @@ describe('Testa as funcionalidades da função Enumerable', function () {
         expect(el).toBe(0);
     });
 
+    it('LastOrDefault sobre Array com predicate com resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].lastOrDefault(0, function (el) { return el === 8 });
+        expect(el).toBe(8);
+    });
+
+    it('LastOrDefault sobre Array com predicate com resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].lastOrDefault(0, function (el) { return el > 8 });
+        expect(el).toBe(10);
+    });
+
+    it('LastOrDefault sobre Array com predicate sem resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].lastOrDefault(0, function (el) { return el === 15 });
+        expect(el).toBe(0);
+    });
+
     it('LastOrDefault sobre Iterator com resultado', function () {
         var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].asIterator().lastOrDefault();
         expect(el).toBe(10);
+    });
+
+    it('LastOrDefault sobre Iterator com predicate com resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].asIterator().lastOrDefault(0, function (el) { return el === 8 });
+        expect(el).toBe(8);
+    });
+
+    it('LastOrDefault sobre Iterator com predicate com resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].asIterator().lastOrDefault(0, function (el) { return el > 6 });
+        expect(el).toBe(10);
+    });
+
+    it('LastOrDefault sobre Iterator com predicate sem resultado', function () {
+        var el = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].asIterator().lastOrDefault(0, function (el) { return el === 15 });
+        expect(el).toBe(0);
     });
 
     it('LastOrDefault sobre Iterator sem resultado sem default', function () {
@@ -170,7 +200,7 @@ describe('Testa as funcionalidades da função Enumerable', function () {
         var el = [].asIterator().lastOrDefault(0);
         expect(el).toBe(0);
     });
-
+    
     it('Any sobre Array com predicate com resultado', function () {
         expect([1, 2, 3, 4, 5].any(function (el) { return el === 5 })).toBe(true);
     });
