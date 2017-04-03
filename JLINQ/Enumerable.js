@@ -32,16 +32,32 @@
         return new SkipIterator(this, count);
     };
 
-    Array.prototype.firstOrDefault = function ($default) {
-        if (this.length > 0) {
-            return this[0];
+    Array.prototype.firstOrDefault = function ($default, predicate) {
+        var source = this;
+
+        if (predicate) {
+            for (var index = 0; index < source.length; index++) {
+                if (predicate(source[index])) {
+                    return source[index];
+                }
+            }
+        } else if (source.length > 0) {
+            return source[0];
         }
         return $default;
     };
 
-    Array.prototype.lastOrDefault = function ($default) {
-        if (this.length > 0) {
-            return this[this.length - 1];
+    Array.prototype.lastOrDefault = function ($default, predicate) {
+        var source = this;
+
+        if (predicate) {
+            for (var index = source.length - 1; index >= 0; index--) {
+                if (predicate(source[index])) {
+                    return source[index];
+                }
+            }
+        } else if (source.length > 0) {
+            return source[source.length - 1];
         }
         return $default;
     };
@@ -171,29 +187,48 @@
         return new SkipIterator(this, count);
     };
 
-    Iterator.prototype.firstOrDefault = function ($default) {
-        if (this.moveNext()) {
-            var result = this.current;
-            this.reset();
+    Iterator.prototype.firstOrDefault = function ($default, predicate) {
 
-            return result;
+        var result = $default;
+
+        if (this.moveNext()) {
+            if (predicate) {
+                do {
+                    if (predicate(this.current)) {
+                        result = this.current;
+                        break;
+                    }
+                }
+                while (this.moveNext());
+            }
+            else {
+                result = this.current;
+            }
+
+            this.reset();
         }
-        return $default;
+        return result;
     };
 
-    Iterator.prototype.lastOrDefault = function ($default) {
-        if (this.moveNext()) {
-            var result;
+    Iterator.prototype.lastOrDefault = function ($default, predicate) {
+        var result = $default;
 
+        if (this.moveNext()) {
             do {
-                result = this.current;
+                if (predicate) {
+                    if (predicate(this.current)) {
+                        result = this.current;
+                    }
+                } else {
+                    result = this.current;
+                }
             }
             while (this.moveNext());
 
             this.reset();
-            return result;
+            
         }
-        return $default;
+        return result;
     };
 
     Iterator.prototype.any = function (predicate) {
